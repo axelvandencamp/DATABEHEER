@@ -1,7 +1,7 @@
 --========================================================================
 -- aanmaak tabel voor import crab mdb
 --------------------------------------------------------------------------
-DROP TABLE IF EXISTS marketing._m_so_crab;
+--DROP TABLE IF EXISTS marketing._m_so_crab;
 
 CREATE TABLE marketing._m_so_crab 
 (gemid numeric,
