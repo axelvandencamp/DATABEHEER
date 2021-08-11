@@ -12,7 +12,7 @@ CREATE TABLE marketing._m_so_crab
  postkannm text
 );
 
-SELECT * FROM marketing._m_so_crab;
+SELECT * FROM marketing._m_so_crab WHERE straatnm LIKE 'Spinnerij%'
 --========================================================================
 -- ERP crab lijst
 --------------------------------------------------------------------------
