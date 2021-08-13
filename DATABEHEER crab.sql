@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------
 --DROP TABLE IF EXISTS marketing._m_so_crab;
 
-CREATE TABLE marketing._m_so_crab 
+CREATE TABLE marketing._m_so_crab ppp
 (gemid numeric,
  gemnm text,
  straatnmid numeric,
