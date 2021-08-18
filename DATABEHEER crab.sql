@@ -19,13 +19,20 @@ SELECT * FROM marketing._m_so_crab WHERE straatnm LIKE 'Spinnerij%'
 SELECT ccs.id ccs_id, ccs.code crab_code, ccs.name, cc.id cc_id, ccs.zip, cc.name
 FROM res_country_city cc
 	JOIN res_country_city_street ccs ON cc.id = ccs.city_id
---WHERE ccs.code IN (217596) --ccs.code voor crabcode
+--WHERE ccs.code IN (179202,145650,181456,182088,29459) --ccs.code voor crabcode
 --WHERE ccs.id = 1679002 
---WHERE ccs.zip IN ('9910','9880') AND  LOWER(ccs.name) = 'driesstraat'
+WHERE ccs.zip IN ('1740') AND  LOWER(ccs.name) = 'meidoornlaan'
 --WHERE cc.name = 'Dendermonde' AND  LOWER(ccs.name) LIKE 'leopold%'
 --WHERE LOWER(ccs.name) = 'rue du tilleul'
 ORDER BY ccs.id DESC
 LIMIT 100
+--========================================================================
+-- partner_id's ophalen voor bepaalde straat + postcode
+--========================================================================
+SELECT p.id, p.name, p.street_id, ccs.id, ccs.code, ccs.name
+FROM res_partner p
+		JOIN res_country_city_street ccs ON ccs.id = p.street_id
+WHERE ccs.zip = '1740' AND ccs.name = 'Meidoornlaan'
 --========================================================================
 -- ERP crab lijst ZONDER CRAB-code
 -- - geeft een lijst van straatnamen + postcodes 
