@@ -6,7 +6,7 @@ CREATE TEMP TABLE _AV_myvar
 	 );
 
 INSERT INTO _AV_myvar VALUES('2021-01-01',	--startdatum
-				'2021-08-19'	--einddatum
+				'2021-06-30'	--einddatum
 				);
 SELECT * FROM _AV_myvar;
 --==============================================================
@@ -42,3 +42,4 @@ FROM _AV_myvar v, res_partner p
 	LEFT OUTER JOIN (SELECT * FROM marketing._crm_leden_factuurinfo()) SQ2 ON SQ2.id = ml.ml_id
 	--user infor
 	JOIN res_users u ON u.id = p.create_uid
+WHERE NOT(COALESCE(p.address_state_id,0) = 2)
