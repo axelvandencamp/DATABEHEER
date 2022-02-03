@@ -6,13 +6,19 @@
 --eventueel verder uit te werken voor extra details
 -- - eg.: nr rekeningafschrift
 --------------------------------
+CREATE TABLE marketing._av_geregistreerdewebsitegebruikers (uid integer,Naam text,Email text,Sinds text,Laatste text,ERPid integer,ERPNaam text,Lidnr integer,Einddatum text);
+-- manueel importeren; na procedure DROPpen (zie onderaan);
+CREATE TABLE marketing._av_suppressionlist (EmailAddress text, Date_ text, Reason text, dummy text);
+-- SELECT DISTINCT reason FROM marketing._av_suppressionlist;
+-- manueel importeren; na procedure DROPpen (zie onderaan);
+-- SELECT a.ERPid,  b.reason FROM marketing._av_geregistreerdewebsitegebruikers a LEFT OUTER JOIN marketing._av_suppressionlist b ON b.emailaddress = a.email WHERE COALESCE(b.reason,'ok')='ok'
 -----------------------------------------
 --SET VARIABLES
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(startdatum DATE, einddatum DATE);
-INSERT INTO _AV_myvar VALUES('2020-03-01',	--startdatum
-				'2020-04-30'	--einddatum
+INSERT INTO _AV_myvar VALUES('2022-01-01',	--startdatum
+				'2022-12-31'	--einddatum
 				);
 SELECT * FROM _AV_myvar;
 --====================================================================
@@ -89,7 +95,9 @@ SELECT	DISTINCT--COUNT(p.id) _aantal, now()::date vandaag
 	END wenst_geen_email_van_NP,
 	p.iets_te_verbergen nooit_contacteren,
 	CASE WHEN login = 'apiuser' THEN 1 ELSE 0 END via_website,
-	CASE WHEN login <> 'apiuser' THEN 1 ELSE 0 END via_andere
+	CASE WHEN login <> 'apiuser' THEN 1 ELSE 0 END via_andere,
+	SQ2.erpid geregistreerdgebruiker,
+	SQ2.reason suppressionreason
 FROM 	_av_myvar v, res_partner p
 	--Voor de ontdubbeling veroorzaakt door meedere lidmaatschapslijnen
 	LEFT OUTER JOIN (SELECT MAX(ml.id) ml_id, ml.partner FROM _av_myvar v, membership_membership_line ml JOIN product_product pp ON pp.id = ml.membership_id WHERE  ml.state = 'invoiced' AND pp.membership_product GROUP BY ml.partner) ml ON ml.partner = p.id
@@ -126,7 +134,17 @@ FROM 	_av_myvar v, res_partner p
 	--tijdschriften
 	LEFT OUTER JOIN mailing_mailing mm1 ON mm1.id = p.periodical_1_id
 	LEFT OUTER JOIN mailing_mailing mm2 ON mm2.id = p.periodical_2_id
+	--geregistreerde gebruikers
+	LEFT OUTER JOIN (SELECT a.ERPid,  b.reason
+					FROM marketing._av_geregistreerdewebsitegebruikers a
+						LEFT OUTER JOIN marketing._av_suppressionlist b ON b.emailaddress = a.email
+					WHERE COALESCE(b.reason,'ok')='ok') SQ2 ON SQ2.erpid = p.id
 WHERE p.id IN (SELECT p.id--, p.membership_state
 			   FROM _av_myvar v, res_partner p JOIN account_coda_sdd_refused csf ON p.id = csf.partner_id 
 			   WHERE csf.create_date::date BETWEEN v.startdatum AND v.einddatum	AND p.membership_state = 'waiting'
+			   		AND csf.reason <> 'MD07' -- MD07 = Debtor Deceased
 			   ORDER BY csf.create_date::date)
+-- SELECT * FROM account_coda_sdd_refused csf WHERE reason = 'MD07' -- MD07 = Debtor Deceased
+-------------------------------------------------------------
+-- DROP TABLE marketing._av_geregistreerdewebsitegebruikers;
+-- DROP TABLE marketing._av_suppressionlist;
