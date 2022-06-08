@@ -8,7 +8,7 @@ CREATE TEMP TABLE _AV_myvar
 	 );
 
 INSERT INTO _AV_myvar VALUES(	
-				ARRAY['2022/05052','2022/05053']
+				ARRAY['2022/05139','2022/05143']
 				);
 SELECT * FROM _AV_myvar;
 --------------------------------------------------------------------------------
@@ -18,3 +18,4 @@ FROM _AV_myvar v, payment_line pl
 	JOIN sdd_mandate sm ON pl.sdd_mandate_id = sm.id
 WHERE po.reference = ANY (v.incasso_bestanden)
 GROUP BY po.reference, sm.recurrent_sequence_type
+ORDER BY po.reference ASC
