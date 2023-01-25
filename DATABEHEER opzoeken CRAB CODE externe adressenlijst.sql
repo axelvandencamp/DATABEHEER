@@ -21,14 +21,14 @@ SELECT * FROM marketing._AV_temp_ontdubbelingalgemeen
 --======================================================
 SELECT * FROM
 	(
-	SELECT sq2.bron_id, sq2.bron_straat, sq2.ccs_straat, sq2.code, MAX(sq2.r) r
+	SELECT sq2.bron_id, sq2.bron_straat, sq2.ccs_id, sq2.ccs_straat, sq2.code, MAX(sq2.r) r
 	FROM
 		(
 		SELECT sq1.*, ROW_NUMBER() OVER (PARTITION BY sq1.bron_straat ORDER BY sq1.sim_straat ASC) AS r
 		FROM
 			(
 			SELECT DISTINCT bron.bron_id, bron.straat bron_straat,
-				ccs.name ccs_straat,
+				CCS.id ccs_id, ccs.name ccs_straat,
 				ccs.code,			
 				similarity(ccs.name,bron.straat) sim_straat
 			FROM marketing._AV_temp_ontdubbelingalgemeen bron, res_partner p
@@ -41,7 +41,7 @@ SELECT * FROM
 			ORDER BY bron.straat, similarity(ccs.name,bron.straat) ASC
 			) sq1
 		) sq2
-	GROUP BY sq2.bron_straat, sq2.bron_id, sq2.ccs_straat, sq2.code 
+	GROUP BY sq2.bron_straat, sq2.bron_id, sq2.ccs_id, sq2.ccs_straat, sq2.code 
 	) sq5
 	JOIN
 	(SELECT sq4.bron_id, MAX(sq4.r) r
@@ -51,7 +51,7 @@ SELECT * FROM
 		FROM
 			(
 			SELECT DISTINCT bron.bron_id, bron.straat bron_straat,
-				ccs.name ccs_straat,
+				CCS.id ccs_id, ccs.name ccs_straat,
 				ccs.code,			
 				similarity(ccs.name,bron.straat) sim_straat
 			FROM marketing._AV_temp_ontdubbelingalgemeen bron, res_partner p
