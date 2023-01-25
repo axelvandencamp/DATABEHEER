@@ -5,6 +5,7 @@ SELECT SUM(sq1."-221- aantal") "221_aantal",
 	MAX("-221- DD")  "221_DD",MAX("-288- DD") "288_DD", MAX("-029- DD") "029_DD",
 	MAX("-221- DD")+MAX("-288- DD")+MAX("-029- DD") ru_dd,
 	datum_afschrift, jaar_afschrift, maand_afschrift, dag_afschrift
+	--jaar_afschrift, maand_afschrift
 FROM (
 	SELECT bs.name,
 		--aantal lijnen
@@ -33,6 +34,9 @@ FROM (
 	) SQ1
 GROUP BY datum_afschrift, jaar_afschrift, maand_afschrift, dag_afschrift
 ORDER BY datum_afschrift DESC
+--GROUP BY jaar_afschrift, maand_afschrift
+--ORDER BY jaar_afschrift, maand_afschrift
+
 
 /*
 SELECT bsl.write_date::date, bsl.* 
