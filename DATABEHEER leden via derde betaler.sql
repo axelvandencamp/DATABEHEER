@@ -37,7 +37,7 @@ FROM membership_third_payer_invoice tpi
 	JOIN res_partner p ON p.id = ml.partner
 	JOIN marketing._crm_partnerinfo() SQ1 ON SQ1.partner_id = p.id*/
 --WHERE i.number = '' OR i.reference = '+++328/1340/05495+++'
-WHERE i.commercial_partner_id = 338356  AND tpi.id = 30
+WHERE i.commercial_partner_id = 376040  AND tpi.id = 130
 	--AND sq1.partner_id IN (302007,302193,56792,206991)
 	--tpi.create_date::date = '2020-11-27'
 ORDER BY il.invoice_id
