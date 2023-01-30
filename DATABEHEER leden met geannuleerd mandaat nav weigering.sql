@@ -58,7 +58,7 @@ SELECT	DISTINCT--COUNT(p.id) _aantal, now()::date vandaag
 		ELSE 'andere'
 	END AS provincie,
 	c.name land,
-	cc.zip||ccs.id::text||p.street_nbr adres_id,
+	cc.zip||ccs.id::text||p.street_nbr::text||p.street_bus::text adres_id,
 	p.email,
 	COALESCE(p.phone_work,p.phone) telefoonnr,
 	p.mobile gsm,
