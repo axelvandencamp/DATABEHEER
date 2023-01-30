@@ -17,8 +17,8 @@ CREATE TABLE marketing._av_suppressionlist (EmailAddress text, Date_ text, Reaso
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(startdatum DATE, einddatum DATE);
-INSERT INTO _AV_myvar VALUES('2022-01-01',	--startdatum
-				'2022-12-31'	--einddatum
+INSERT INTO _AV_myvar VALUES('2023-01-01',	--startdatum
+				'2023-12-31'	--einddatum
 				);
 SELECT * FROM _AV_myvar;
 --====================================================================
@@ -58,6 +58,7 @@ SELECT	DISTINCT--COUNT(p.id) _aantal, now()::date vandaag
 		ELSE 'andere'
 	END AS provincie,
 	c.name land,
+	cc.zip||ccs.id::text||p.street_nbr adres_id,
 	p.email,
 	COALESCE(p.phone_work,p.phone) telefoonnr,
 	p.mobile gsm,
