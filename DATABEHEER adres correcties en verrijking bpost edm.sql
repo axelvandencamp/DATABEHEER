@@ -13,7 +13,9 @@ CREATE TABLE marketing._m_temp_datavalidatie
  out_moved numeric, out_match_level text, out_addr_in numeric, out_st_nm text, out_house_num text, out_box_num text, out_post_cd text, out_city text,
  out_cntrct_id numeric, out_move_dt text /*later omzetten naar datum indien nodig*/, out_cntry_cd text, out_robinson numeric
 );
-SELECT * FROM marketing._m_temp_datavalidatie;
+SELECT * FROM marketing._m_temp_datavalidatie WHERE database_id IN (162349,388850,324510,384509,
+	337891,376314,230750,330239,283286,250553,120697,196205,321867,123897,171009,322969,242603,
+	319041,181712,229523,144124);
 -- DELETE FROM marketing._m_temp_datavalidatie;
 -------------------------------------------------------------
 /*
@@ -57,12 +59,15 @@ FROM marketing._m_temp_datavalidatie out1
 	WHERE COALESCE(cc.zip,'_') = '_'
 		AND COALESCE(p.address_state_id,0) <> 7) sq1 ON sq1.out_post_cd = out1.out_post_cd
 -------------------------------------------------------------
+-- lijsten klaarmaken met vergelijking ERP straatnaam vs Bpost straatnaam
+-- - hier moet dan het import bestand uit gehaald worden
+-------------------------------------------------------------
 SELECT sq3.*
 FROM
 	(SELECT sq1.partner_id, sq1.address_state_id, sq1.cc_id, sq1.cc_name, sq1.cc_zip, sq1.ccs_id, sq1.ccs_name, sq1.out_house_num, sq1.out_box_num, max(sq1.sim_straat) max_sim_straat, sq1.voornaam, sq1.achternaam, /*sq1.building,*/ sq1.straat, sq1.huisnummer, sq1.bus, sq1.postcode, sq1.woonplaats, /*sq1.land, sq1.email,*/
 		sq1.out_dq_id, sq1.out_st_nm, sq1.out_house_num, sq1.out_box_num, sq1.out_post_cd, sq1.out_city, sq1.out_cntrct_id, sq1.out_cntry_cd, sq1.out_robinson
 	FROM 
-	 --SELECT sq1.partner_id, max(sim_straat) sim_straat FROM
+	 --selectie van aan te passen straten met match in ERP waarvoor status <> 'tot nader order niet aanpassen'
 		(SELECT out1.database_id partner_id, p.address_state_id, cc.id cc_id, cc.name cc_name, cc.zip cc_zip, ccs.id ccs_id, ccs.name ccs_name, similarity(ccs.name,out1.out_st_nm) sim_straat, out1.*
 		FROM marketing._m_temp_datavalidatie out1
 			JOIN public.res_partner p ON p.id = out1.database_id
@@ -78,8 +83,11 @@ FROM
 		sq1.out_dq_id, sq1.out_st_nm, sq1.out_house_num, sq1.out_box_num, sq1.out_post_cd, sq1.out_city, sq1.out_cntrct_id, sq1.out_cntry_cd, sq1.out_robinson
 	) sq3
 	JOIN
+	-- selectie van aan te passen adressen linken aan vgl straatnaam
+	-- dataval id + vergelijking straatnaam afdrukken
 	(SELECT sq1.out_dq_id, max(sq1.sim_straat) max_sim_straat
 	FROM
+	 	-- erp straatnaam vergelijken met dataval straatnaam
 		(SELECT out1.out_dq_id, similarity(ccs.name,out1.out_st_nm) sim_straat
 		 FROM marketing._m_temp_datavalidatie out1
 			JOIN public.res_country_city cc ON cc.zip = out1.out_post_cd
@@ -90,7 +98,7 @@ FROM
 	GROUP BY sq1.out_dq_id
 	) sq4
 	ON sq4.out_dq_id = sq3.out_dq_id AND sq4.max_sim_straat = sq3.max_sim_straat
-WHERE sq4.max_sim_straat < 1	
+WHERE sq4.max_sim_straat = 1	
 
 -------------------------------------------------------------
 -- losse test queries
