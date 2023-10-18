@@ -10,10 +10,13 @@ WHERE COALESCE(p.third_payer_id,0) <> 0
 -- leden per 3e betaler
 -----------------------
 SELECT p.third_payer_id, p2.name, p.create_date::date, SQ1.* 
+	, COALESCE(mo.name,'') herkomst_lidmaatschap
 FROM res_partner p
 	JOIN marketing._crm_partnerinfo() SQ1 ON SQ1.partner_id = p.id
 	JOIN res_partner p2 ON p2.id = p.third_payer_id
-WHERE p.third_payer_id = 338356 --COALESCE(p.third_payer_id,0) <> 0
+	--herkomst lidmaatschap
+	LEFT OUTER JOIN res_partner_membership_origin mo ON p.membership_origin_id = mo.id
+--WHERE p.third_payer_id = 338356 --COALESCE(p.third_payer_id,0) <> 0
 ORDER BY p.create_date::date DESC
 -----------------------------------------------------
 
