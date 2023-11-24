@@ -16,12 +16,13 @@ SELECT * FROM marketing._m_so_crab WHERE straatnm LIKE 'Spinnerij%'
 --========================================================================
 -- ERP crab lijst
 --------------------------------------------------------------------------
-SELECT ccs.id ccs_id, ccs.code crab_code, ccs.name, cc.id cc_id, ccs.zip, cc.name
+SELECT ccs.id ccs_id, ccs.code crab_code, ccs.name, cc.id cc_id, ccs.zip, cc.name, ccs.crab_deleted
 FROM res_country_city cc
 	JOIN res_country_city_street ccs ON cc.id = ccs.city_id
+WHERE COALESCE(ccs.crab_deleted,'false') = 'false'
 --WHERE ccs.code IN (179202,145650,181456,182088,29459) --ccs.code voor crabcode
 --WHERE ccs.id = 1679002 
-WHERE ccs.zip IN ('1740') AND  LOWER(ccs.name) = 'meidoornlaan'
+--WHERE /*ccs.zip IN ('3454','3450') AND */ LOWER(ccs.name) = 'heffelstraat'
 --WHERE cc.name = 'Dendermonde' AND  LOWER(ccs.name) LIKE 'leopold%'
 --WHERE LOWER(ccs.name) = 'rue du tilleul'
 ORDER BY ccs.id DESC
