@@ -30,10 +30,11 @@ LIMIT 100
 --========================================================================
 -- partner_id's ophalen voor bepaalde straat + postcode
 --========================================================================
-SELECT p.id, p.name, p.street_id, ccs.id, ccs.code, ccs.name
+SELECT p.id, p.name, p.street_id, ccs.code, ccs.name
 FROM res_partner p
 		JOIN res_country_city_street ccs ON ccs.id = p.street_id
 WHERE ccs.zip = '1740' AND ccs.name = 'Meidoornlaan'
+SELECT ccs.id partner_id, ccs.code, ccs.name, ccs.zip FROM res_country_city_street ccs WHERE ccs.zip = '1740' AND ccs.name = 'Meidoornlaan'
 --========================================================================
 -- ERP crab lijst ZONDER CRAB-code
 -- - geeft een lijst van straatnamen + postcodes 
