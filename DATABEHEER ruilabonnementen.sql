@@ -7,4 +7,5 @@ FROM membership_membership_line ml
 	INNER JOIN res_partner p ON ml.partner = p.id
 	JOIN product_product pp ON pp.id = ml.membership_id
 WHERE (LOWER(ml.remarks) LIKE 'ruilabonnement%' OR LOWER(ml.remarks) LIKE 'gratis')
+	AND p.active
 	--AND ml.partner = 20353
