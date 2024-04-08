@@ -35,6 +35,8 @@ FROM res_partner p
 		JOIN res_country_city_street ccs ON ccs.id = p.street_id
 WHERE ccs.zip = '1740' AND ccs.name = 'Meidoornlaan'
 SELECT ccs.id partner_id, ccs.code, ccs.name, ccs.zip FROM res_country_city_street ccs WHERE ccs.zip = '1740' AND ccs.name = 'Meidoornlaan'
+--
+SELECT ccs.id ccs_id, ccs.code, ccs.name, ccs.zip FROM res_country_city_street ccs WHERE ccs.zip = '2930' AND ccs.name = 'Bijsterveld'
 --========================================================================
 -- ERP crab lijst ZONDER CRAB-code
 -- - geeft een lijst van straatnamen + postcodes 
