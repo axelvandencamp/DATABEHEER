@@ -4,12 +4,12 @@
 ----------------------------------------------------------
 -- nieuwe records toevoegen aan marketing._m_dwh_koalectV2
 ----------------------------------------------------------
-INSERT INTO marketing._m_dwh_koalectV2 ("Procedure", Campaign, Project, transactie_id, "Date", Status, Category, Payment_method, Tax_receipt, amount, Fees,
-	Net_amount, Currency, Bank_statement, Payout_ID, Payout_arrival_date, Payout_amount, Payout_bank_statement, "Language", Firstname,
-	Lastname, Email, Gender, Business_Name, Business_VAT, Birthday,	Address_Line_1, Address_Line_2, Address_Box, Address_House_Number,
-	City, Zip_code, Country, Phone_Number, Campaign_ID, Project_ID, External_reference, User_ID, Is_Anonymous, Terms_of_Use, Newsletter,
+INSERT INTO marketing._m_dwh_koalectV2 (procedure, campaign, project, transactie_id, date, status, category, payment_method, tax_receipt, amount, fees,
+	net_amount, currency, bank_statement, payout_id, payout_arrival_date, payout_amount, payout_bank_statement, language, firstname,
+	lastname, email, gender, business_name, business_vat, birthday,	address_line_1, address_line_2, address_box, address_house_number,
+	city, zip_code, country, phone_number, campaign_ID, project_ID, external_reference, user_ID, is_anonymous, terms_of_use, newsletter,
 	SMS_Content, Subscription_ID, Is_Subscription, Is_Subscription_Active, Procedure_ID, Updated_at, Procedure_Category, Payment_Provider_Name,
-	Tax_Receipt_Allowed, Benefiting, National_ID, "Benefiting_reference", salutation)
+	tax_receipt_allowed, benefiting, national_ID, benefiting_reference, salutation)
 SELECT * 
 FROM marketing._m_stg_koalectv2
 WHERE transactie_id NOT IN (SELECT transactie_id FROM marketing._m_dwh_koalectV2)
