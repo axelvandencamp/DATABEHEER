@@ -1,5 +1,11 @@
--- DROP TABLE marketing._m_dwh_koalectv2expeditie;
-CREATE TABLE marketing._m_dwh_koalectv2expeditie (
+/*
+--------------------------------------------------
+-- vaste tabel
+-- - NIET droppen
+-- - NIET opnieuw aanmaken
+--------------------------------------------------
+-- DROP TABLE marketing._m_dwh_koalectv2;
+CREATE TABLE marketing._m_dwh_koalectv2 (
 	"Procedure"	varchar,
 	Campaign varchar,
 	Project varchar,
@@ -54,4 +60,4 @@ CREATE TABLE marketing._m_dwh_koalectv2expeditie (
 	National_ID varchar
 	);
 
-SELECT * FROM marketing._m_dwh_koalectv2expeditie ORDER BY "Date" ASC;
+SELECT * FROM marketing._m_dwh_koalectv2 ORDER BY "Date" ASC;
