@@ -4,7 +4,7 @@ SELECT p.id, p.create_date::date, p.name naam, mo.name herkomst,
 FROM res_partner p
 	LEFT OUTER JOIN res_partner_free_class pfc ON p.free_membership_class_id = pfc.id
 	LEFT OUTER JOIN res_partner_membership_origin mo ON mo.id = p.membership_origin_id
-WHERE p.free_member AND p.active 
+WHERE p.free_member AND p.active AND mo.name IN ('Gratis Lidmaatschap','J.N.M. ouwe sok')
 		--AND pfc.name = 'Pers'
 ORDER BY pfc.name
 
