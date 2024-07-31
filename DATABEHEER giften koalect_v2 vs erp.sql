@@ -10,20 +10,20 @@ SELECT * FROM marketing._av_temp_koalectv2import
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(startdatum DATE, einddatum DATE);
-INSERT INTO _AV_myvar VALUES('2023-07-01',	--startdatum
-				'2025-12-31');
+INSERT INTO _AV_myvar VALUES('2023-10-01',	--startdatum
+				'2024-12-31');
 ----------------------
-SELECT k.procedure k_procedure, k.campaign k_campaign, k.project k_project, k.external_reference k_projectcode, sq1.erp_projcode, sq1.erp_projnaam, k.transactie_id k_transactie_id, sq1.erp_trans, k.date_ k_date, k.tax_receipt k_taxreceipt,
+SELECT k.procedure k_procedure, k.campaign k_campaign, k.project k_project, k.benefiting_reference k_projectcode, sq1.erp_projcode, sq1.erp_projnaam, k.transactie_id k_transactie_id, sq1.erp_trans, k.date k_date, k.tax_receipt k_taxreceipt,
 	k.net_amount k_bedrag, sq1.erp_bedrag,
-	k.firstname k_firstname, k.lastname k_lastname, sq1.erp_naam, sq1.erp_id, sq1.erp_boeking, k.address_line_1 k_straat, k.address_house_number k_huisnr, k.address_box k_busnr, k.city k_city, k.zip_code k_postcode, 
+	k.firstname k_firstname, k.lastname k_lastname, sq1.erp_naam, sq1.partner_id, sq1.erp_boeking, k.address_line_1 k_straat, k.address_house_number k_huisnr, k.address_box k_busnr, k.city k_city, k.zip_code k_postcode, 
 	k.email k_email, k.national_id k_NN, 
 	k.business_name k_bedrijf, k.business_vat k_btwnummer
-FROM marketing._av_temp_koalectv2import k
-	JOIN
+FROM marketing._m_dwh_koalectv2 k
+	LEFT OUTER JOIN
 		(SELECT REPLACE(REPLACE(REPLACE(aml.name,';',','),chr(10),' '),chr(13), ' ') AS erp_descr,
 			REPLACE(regexp_replace(REPLACE(REPLACE(REPLACE(aml.name,';',','),chr(10),' '),chr(13), ' '), '\D','','g'),'00000','') erp_trans,
 			p.name as erp_naam,
-			p.id erp_id,
+			p.id partner_id,
 			COALESCE(COALESCE(aaa3.code,aaa2.code),aaa1.code) AS erp_projcode,
 			COALESCE(COALESCE(aaa3.name,aaa2.name),aaa1.name) AS erp_projnaam,		
 			(aml.credit - aml.debit) erp_bedrag,
@@ -56,6 +56,9 @@ FROM marketing._av_temp_koalectv2import k
 		 	AND LENGTH(REPLACE(regexp_replace(REPLACE(REPLACE(REPLACE(aml.name,';',','),chr(10),' '),chr(13), ' '), '\D','','g'),'00000','')) <= 6
 		ORDER BY aml.date
 		) SQ1 ON SQ1.erp_trans  = k.transactie_id::text
-WHERE LOWER(k.project) LIKE '%iris%'
+WHERE sq1.partner_id IN (351547,404990)
+/*WHERE bank_statement LIKE 'Expeditie%'
+	AND LOWER(benefiting) LIKE '%keigat%'*/
+--WHERE LOWER(k.project) LIKE '%iris%'
 		
 		
