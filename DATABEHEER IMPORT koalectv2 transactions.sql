@@ -1,5 +1,9 @@
 -------------------------------------
 -- export from mykoalect
+-- -
+-- DELETE FROM marketing._m_stg_koalectv2
+-- SELECT * FROM marketing._m_stg_koalectv2
+-- -
 -- import (manual) into marketing._m_stg_koalectv2
 ----------------------------------------------------------
 -- nieuwe records toevoegen aan marketing._m_dwh_koalectV2
@@ -14,4 +18,4 @@ SELECT *
 FROM marketing._m_stg_koalectv2
 WHERE transactie_id NOT IN (SELECT transactie_id FROM marketing._m_dwh_koalectV2)
 
-SELECT * FROM marketing._m_dwh_koalectV2
+SELECT max(date) datum FROM marketing._m_dwh_koalectV2
