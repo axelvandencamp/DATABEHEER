@@ -56,7 +56,8 @@ FROM marketing._m_dwh_koalectv2 k
 		 	AND LENGTH(REPLACE(regexp_replace(REPLACE(REPLACE(REPLACE(aml.name,';',','),chr(10),' '),chr(13), ' '), '\D','','g'),'00000','')) <= 6
 		ORDER BY aml.date
 		) SQ1 ON SQ1.erp_trans  = k.transactie_id::text
-WHERE sq1.partner_id IN (351547,404990)
+--WHERE sq1.partner_id IN (351547,404990)
+WHERE k.firstname = 'Katrien' AND k.lastname = 'Destoop'
 /*WHERE bank_statement LIKE 'Expeditie%'
 	AND LOWER(benefiting) LIKE '%keigat%'*/
 --WHERE LOWER(k.project) LIKE '%iris%'
