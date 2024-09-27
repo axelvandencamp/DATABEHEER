@@ -8,5 +8,6 @@ CREATE TABLE marketing._av_temp_suppressionlist
 	 Reason text,
 	 dummy text);
 	 
---SELECT DISTINCT reason FROM marketing._av_temp_suppressionlist;	 
+-- SELECT * /*DISTINCT reason*/ FROM marketing._av_temp_suppressionlist;	
+-- SELECT DISTINCT COUNT(emailaddress) FROM marketing._av_temp_suppressionlist;	
 	 
