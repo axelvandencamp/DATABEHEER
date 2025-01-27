@@ -8,7 +8,7 @@ CREATE TEMP TABLE _AV_myvar
 	 );
 
 INSERT INTO _AV_myvar VALUES(	
-				ARRAY['2022/05139','2022/05143']
+				ARRAY['2025/06383']
 				);
 SELECT * FROM _AV_myvar;
 --------------------------------------------------------------------------------
