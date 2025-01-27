@@ -2,13 +2,13 @@
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(startdatum DATE, einddatum DATE);
-INSERT INTO _AV_myvar VALUES('2024-02-01',	--startdatum
-				'2024-12-31'	--einddatum
+INSERT INTO _AV_myvar VALUES('2024-12-16',	--startdatum
+				'2025-12-31'	--einddatum
 				);
 SELECT * FROM _AV_myvar;
 --====================================================================
 SELECT p.id, p.membership_nbr, 'prioriteit', p.name, p.membership_state, sm.sm_last_debit_date, sm.sm_state,
-    COALESCE(COALESCE(p.phone_work,p.phone),'') telefoonnr,
+	COALESCE(COALESCE(p.phone_work,p.phone),'') telefoonnr,
     COALESCE(p.mobile,'') gsm,
     COALESCE(p.first_name,'') as voornaam,
     COALESCE(p.last_name,'') as achternaam,
@@ -48,12 +48,12 @@ FROM _av_myvar v, res_partner p
     --bank/mandaat info
     --door bank aan mandaat te linken en enkel de mandaat info te nemen ontdubbeling veroorzaakt door meerdere bankrekening nummers
     JOIN (SELECT pb.id pb_id, pb.partner_id pb_partner_id, sm.id sm_id, sm.state sm_state, sm.last_debit_date sm_last_debit_date FROM res_partner_bank pb JOIN sdd_mandate sm ON sm.partner_bank_id = pb.id WHERE sm.state = 'cancel') sm ON pb_partner_id = p.id
-WHERE sm.sm_state = 'cancel' and sm.sm_last_debit_date > v.startdatum
+WHERE sm.sm_state = 'cancel' and sm.sm_last_debit_date >= v.startdatum
     AND NOT(p.membership_state IN ('paid','free','old'))
-    AND COALESCE(p.iets_te_verbergen,false) = false -- AND p.opt_out AND p.opt_out_letter
+    AND COALESCE(p.iets_te_verbergen,false) = false  AND COALESCE(p.opt_out,false) = false AND COALESCE(p.opt_out_letter,false) = false
 	AND p.id IN (SELECT p.id--, p.membership_state
 			   FROM _av_myvar v, res_partner p JOIN account_coda_sdd_refused csf ON p.id = csf.partner_id 
-			   WHERE csf.create_date::date BETWEEN v.startdatum AND v.einddatum	--AND p.membership_state = 'waiting'
+			   WHERE csf.create_date::date BETWEEN v.startdatum AND v.einddatum	AND p.membership_state = 'waiting'
 			   		AND csf.reason <> 'MD07' -- MD07 = Debtor Deceased
 			   ORDER BY csf.create_date::date)
 ORDER BY sm.sm_last_debit_date DESC
