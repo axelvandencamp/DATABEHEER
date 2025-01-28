@@ -7,7 +7,7 @@ INSERT INTO _AV_myvar VALUES('2024-12-16',	--startdatum
 				);
 SELECT * FROM _AV_myvar;
 --====================================================================
-SELECT p.id, p.membership_nbr, 'prioriteit', p.name, p.membership_state, sm.sm_last_debit_date, sm.sm_state,
+SELECT p.id, p.membership_nbr, 'prioriteit', p.name, p.membership_state, p.membership_cancel, sm.sm_last_debit_date, sm.sm_state,
 	COALESCE(COALESCE(p.phone_work,p.phone),'') telefoonnr,
     COALESCE(p.mobile,'') gsm,
     COALESCE(p.first_name,'') as voornaam,
@@ -38,7 +38,9 @@ SELECT p.id, p.membership_nbr, 'prioriteit', p.name, p.membership_state, sm.sm_l
     END wenst_geen_post_van_NP,
     CASE
         WHEN COALESCE(p.opt_out,'f') = 'f' THEN 0 ELSE 1
-    END wenst_geen_email_van_NP
+    END wenst_geen_email_van_NP,
+	CASE WHEN COALESCE(s.emailaddress,'_') = '_' THEN 'neen' ELSE 'ja' END suppressed,
+	CASE WHEN COALESCE(s2.emailaddress,'_') = '_' THEN 'neen' ELSE 'ja' END suppressed_work
     --, p.iets_te_verbergen nooit_contacteren
 FROM _av_myvar v, res_partner p
     --land, straat, gemeente info
@@ -48,6 +50,9 @@ FROM _av_myvar v, res_partner p
     --bank/mandaat info
     --door bank aan mandaat te linken en enkel de mandaat info te nemen ontdubbeling veroorzaakt door meerdere bankrekening nummers
     JOIN (SELECT pb.id pb_id, pb.partner_id pb_partner_id, sm.id sm_id, sm.state sm_state, sm.last_debit_date sm_last_debit_date FROM res_partner_bank pb JOIN sdd_mandate sm ON sm.partner_bank_id = pb.id WHERE sm.state = 'cancel') sm ON pb_partner_id = p.id
+		LEFT OUTER JOIN marketing._av_suppressionlist s ON LOWER(s.emailaddress) = LOWER(p.email) 
+		LEFT OUTER JOIN marketing._av_suppressionlist s2 ON LOWER(s2.emailaddress) = LOWER(p.email_work)
+
 WHERE sm.sm_state = 'cancel' and sm.sm_last_debit_date >= v.startdatum
     AND NOT(p.membership_state IN ('paid','free','old'))
     AND COALESCE(p.iets_te_verbergen,false) = false  AND COALESCE(p.opt_out,false) = false AND COALESCE(p.opt_out_letter,false) = false
