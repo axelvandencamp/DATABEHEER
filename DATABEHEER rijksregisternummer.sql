@@ -25,18 +25,19 @@ WHERE 	u.login IN ('griet.vanddriessche','kristien.vercauteren','diederik.willem
 SELECT *
 FROM
 	(
-		SELECT g.partner_id, SUM(g.bedrag) bedrag,  p.name, 
+		SELECT p.id partner_id, /*SUM(g.bedrag) bedrag,*/  p.name, 
 			CASE WHEN COALESCE(p.corporation_type_id,0) = 0 THEN COALESCE(p.national_id_nbr,'') ELSE COALESCE(p.company_registration_number,'') END RRN_ON,
 			CASE WHEN COALESCE(p.national_id_nbr,'')='' AND COALESCE(p.company_registration_number,'')='' THEN 0 ELSE 1 END RRN_ON_t,
 			CASE WHEN COALESCE(p.corporation_type_id,0) = 0 THEN 0 ELSE 1 END bedrijf,
 			CASE WHEN COALESCE(p.national_id_nbr,'_') = '_' THEN 0 ELSE 1 END RRN,
 			CASE WHEN COALESCE(p.company_registration_number,'_') = '_' THEN 0 ELSE 1 END "ON",
 			p.corporation_type_id, p.national_id_nbr, p.company_registration_number
-		FROM marketing._m_sproc_rpt_giften('YTD', now()::date, now()::date, 15) g
-			JOIN res_partner p ON p.id = g.partner_id
+		FROM res_partner p
+			--JOIN marketing._m_sproc_rpt_giften('YTD', now()::date, now()::date, 15) g ON g.partner_id = p.id
 		WHERE COALESCE(p.organisation_type_id,0) = 0 
 		GROUP BY partner_id, p.name, p.corporation_type_id, p.national_id_nbr, p.company_registration_number
 	) sq1
+WHERE rrn_on_t > 0	
 WHERE sq1.bedrag >= 40	
 WHERE sq1.bedrag BETWEEN 30 AND 39.999
 	
