@@ -9,10 +9,11 @@ WHERE COALESCE(p.third_payer_id,0) <> 0
 -----------------------
 -- leden per 3e betaler
 -----------------------
-SELECT p.third_payer_id, p2.name, p.create_date::date, SQ1.* 
-	, COALESCE(mo.name,'') herkomst_lidmaatschap
+SELECT p.id partner_id, p.name naam, p.third_payer_id, p2.name, COALESCE(p2.third_payer_one_time,'false') eenmalig, p2.third_payer_flag, 
+	p.create_date::date, --SQ1.* 
+	COALESCE(mo.name,'') herkomst_lidmaatschap
 FROM res_partner p
-	JOIN marketing._crm_partnerinfo() SQ1 ON SQ1.partner_id = p.id
+	--JOIN marketing._crm_partnerinfo() SQ1 ON SQ1.partner_id = p.id
 	JOIN res_partner p2 ON p2.id = p.third_payer_id
 	--herkomst lidmaatschap
 	LEFT OUTER JOIN res_partner_membership_origin mo ON p.membership_origin_id = mo.id
@@ -62,3 +63,9 @@ FROM membership_third_payer_invoice tpi
 	JOIN membership_third_payer_invoice_line tpil ON tpil.third_payer_invoice_id = tpi.id
 	JOIN membership_membership_line ml ON ml.id = tpil.membership_line_id
 	JOIN res_partner p ON p.id = tpil.third_payer_id
+----------------------------------------------------
+-- derde betalers basisinfo
+----------------------------------------------------
+SELECT p.id, p.name, COALESCE(p.third_payer_one_time,'false') eenmalig, p.third_payer_flag
+FROM res_partner p 
+WHERE p.third_payer_flag ANd third_payer_one_time
