@@ -2,8 +2,8 @@
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(startdatum DATE, einddatum DATE);
-INSERT INTO _AV_myvar VALUES('2024-12-16',	--startdatum
-				'2025-12-31'	--einddatum
+INSERT INTO _AV_myvar VALUES('2026-01-01',	--startdatum
+				'2026-12-31'	--einddatum
 				);
 SELECT * FROM _AV_myvar;
 --====================================================================
