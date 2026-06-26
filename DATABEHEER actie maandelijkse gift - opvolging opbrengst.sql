@@ -18,7 +18,7 @@ INSERT INTO koalect_actie_maandelijkse_gift --VALUES
 SELECT * FROM koalect_actie_maandelijkse_gift;
 --====================================================================
 SELECT p.id, p.name naam_deelnemer, sq2.partner_id, sq2.name, 
-	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(sq2.info,'n/a'),chr(9),''),chr(10),''),chr(11),''),chr(12),''),chr(13),'') info,
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(LOWER(sq2.info),'n/a'),chr(9),''),chr(10),''),chr(11),''),chr(12),''),chr(13),'') info,
 	sq2.date, sq2.email,
 	COALESCE(sq1.i_id,0) i_id, COALESCE(sq1.i_reference,'') i_reference, COALESCE(sq1.i_number,'') i_number, COALESCE(sq1.i_amount_total,0) i_amount_total, COALESCE(sq1.i_date_invoice,'1900-01-01') i_date_invoice, --sq1.cn_factuurnr, 
 	dpa.id dpa_id, dpa.partner_id dpa_partner_id,
