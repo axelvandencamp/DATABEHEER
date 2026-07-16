@@ -25,6 +25,7 @@ SELECT p.id, p.name naam_deelnemer, sq2.partner_id, sq2.name,
 	CASE WHEN COALESCE(dpa.donation_cancel,'1900-01-01') > '1900-01-01' THEN p.id ELSE 0 END dpa_opgezegd,
 	COALESCE(ddl.id,0) ddl_id, /*ddl.analytic_account_id ddl_analytic_account_id, ddl.invoice_id ddl_invoice_id,*/
 	/*aaa.id aaa_id,*/ COALESCE(aaa.code,'') project, COALESCE(aaa.name,'') project_name
+--SELECT DISTINCT p.id
 FROM /*koalect_actie_maandelijkse_gift k,*/ res_partner p 
 	JOIN
 	-- SQ2: deelname actie
@@ -57,6 +58,7 @@ FROM /*koalect_actie_maandelijkse_gift k,*/ res_partner p
 	
 WHERE interval_type = 'M' 
 	 --AND aaa2.code IN (SELECT DISTINCT project_code FROM koalect_actie_maandelijkse_gift)
+	 --AND REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(LOWER(sq2.info),'n/a'),chr(9),''),chr(10),''),chr(11),''),chr(12),''),chr(13),'') LIKE '%scheldemeersen/d'
 ORDER BY sq2.date DESC --dpa.partner_id
 
 
