@@ -15,6 +15,9 @@ CREATE TEMP TABLE koalect_actie_maandelijkse_gift
 
 INSERT INTO koalect_actie_maandelijkse_gift --VALUES
 	(SELECT DISTINCT form_name, external_reference FROM marketing._m_dwh_koalectdata_m_gift);
+-- SELECT * FROM marketing._m_dwh_koalectdata_m_gift WHERE contributor_firstname = 'Xavier'
+-- SELECT * FROM marketing._m_dwh_koalectdata_m_gift WHERE contributor_lastname = 'Van Cutsem'
+-- SELECT DISTINCT form_name, external_reference FROM marketing._m_dwh_koalectdata_m_gift WHERE created_date::date < '2026-01-01'
 SELECT * FROM koalect_actie_maandelijkse_gift;
 --====================================================================
 SELECT p.id, p.name naam_deelnemer, sq2.partner_id, sq2.name, 
@@ -57,6 +60,7 @@ FROM /*koalect_actie_maandelijkse_gift k,*/ res_partner p
 	
 	
 WHERE interval_type = 'M' 
+	--AND NOT(aaa.code = 'F-03010')
 	 --AND aaa2.code IN (SELECT DISTINCT project_code FROM koalect_actie_maandelijkse_gift)
 	 --AND REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(LOWER(sq2.info),'n/a'),chr(9),''),chr(10),''),chr(11),''),chr(12),''),chr(13),'') LIKE '%scheldemeersen/d'
 ORDER BY sq2.date DESC --dpa.partner_id
