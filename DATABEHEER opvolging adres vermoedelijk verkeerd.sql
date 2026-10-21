@@ -9,6 +9,7 @@ FROM marketing._m_dwh_partners p_dwh
 WHERE p_dwh.adres_status_vermoedelijk
 	--AND p_dwh.adres_status_verkeerd
 	AND p_dwh.adres_status_vermoedelijk_datum < CURRENT_DATE - INTERVAL '9 months' - (EXTRACT(DAY FROM CURRENT_DATE) - 1) * INTERVAL '1 day'
+	AND p_dwh.actief
 ORDER BY p_dwh.adres_status_vermoedelijk_datum ASC
 
 
